@@ -9,6 +9,7 @@ import lombok.Data;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @RedisHash("User")
 @Data
@@ -23,6 +24,9 @@ public class UserCacheEntity implements Serializable {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private Boolean isActive;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
 
 

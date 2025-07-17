@@ -31,7 +31,8 @@ public class RegisterUserHandler implements RequestHandler<RegisterUserRequest, 
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.USER);
+        user.setRole(Role.OPERATOR); // Por defecto los nuevos registros son OPERATOR (empleados del parqueadero)
+        user.setIsActive(true);
 
         User saved = userRepository.save(user);
         UserEntity userEntity = userMapper.userToUserEntity(saved);
