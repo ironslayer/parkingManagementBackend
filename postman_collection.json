@@ -1,0 +1,286 @@
+{
+	"info": {
+		"_postman_id": "5b285d5e-cd76-423b-b0cc-4de2ce681d3c",
+		"name": "Spring Boot Template",
+		"description": "Esta colección contiene todas las peticiones necesarias para probar y entender el módulo de **usuarios** en la plantilla definitiva de Spring Boot.\n\nIncluye funcionalidades como:\n\n- 📝 Registro de nuevos usuarios\n    \n- 🔐 Inicio de sesión (autenticación con JWT)\n    \n- 👤 Consulta de perfil del usuario autenticado\n    \n- 🔁 Renovación de tokens\n    \n- 🔒 Acceso restringido según roles y permisos\n    \n- 🧪 Pruebas de endpoints protegidos\n    \n\n⚠️ Recuerda usar los tokens JWT generados para acceder a rutas protegidas.\n\n📦 Todos los endpoints están preparados para pruebas locales y en entorno de desarrollo.\n\n🔁 Puedes adaptar fácilmente los headers, cuerpos y variables según tus necesidades o entorno.\n\n---\n\nThis collection contains all the requests needed to test and understand the Users module in the definitive Spring Boot template.  \nIt includes features such as:  \n📝 New user registration  \n🔐 Login (JWT authentication)  \n👤 Authenticated user profile query  \n🔁 Token renewal  \n🔒 Restricted access based on roles and permissions  \n🧪 Protected endpoint testing\n\n⚠️ Remember to use the generated JWT tokens to access protected routes.\n\n📦 All endpoints are prepared for local and development testing.  \n🔁 You can easily adapt the headers, bodies, and variables to suit your needs or environment.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23080126"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users/:id",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users/:id",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register a user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Authentication correctly\", function () {\r",
+									"\r",
+									"    let body = pm.response.json();\r",
+									"\r",
+									"    pm.expect(body.token).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"if(pm.response.json().token){\r",
+									"\r",
+									"    pm.collectionVariables.set(\"TOKEN\", pm.response.json().token);\r",
+									"\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\": \"John\",\r\n    \"lastname\":\"Doe\",\r\n    \"email\":\"test@gmail.com\",\r\n    \"password\":\"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/register",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\": \"John\",\r\n    \"lastname\":\"Doe\",\r\n    \"email\":\"test@gmail.com\",\r\n    \"password\":\"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/v1/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Authentication correctly\", function () {\r",
+									"\r",
+									"    let body = pm.response.json();\r",
+									"\r",
+									"    pm.expect(body.token).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"if(pm.response.json().token){\r",
+									"\r",
+									"    pm.collectionVariables.set(\"TOKEN\", pm.response.json().token);\r",
+									"\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"test@gmail.com\",\r\n    \"password\":\"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/authenticate",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "http://localhost:8080/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "TOKEN",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYXZpZDExanZAZ21haWwuY29tIiwiaWF0IjoxNjc2ODAxMjE0LCJleHAiOjE2NzY4MTIwMTR9.5GXPx80xb9gbPH_keekuJNTJCXxyw_dU4AityT_r4pU",
+			"type": "string"
+		}
+	]
+}
