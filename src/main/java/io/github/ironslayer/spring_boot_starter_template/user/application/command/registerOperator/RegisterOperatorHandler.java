@@ -15,10 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-/**
- * Handler para registrar nuevos operadores del parqueo
- * SOLO usuarios con rol ADMIN pueden ejecutar esta operación
- */
 @Component
 @RequiredArgsConstructor
 public class RegisterOperatorHandler implements RequestHandler<RegisterOperatorRequest, RegisterOperatorResponse> {
