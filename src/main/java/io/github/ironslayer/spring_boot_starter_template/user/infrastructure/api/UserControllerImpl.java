@@ -5,8 +5,8 @@ import io.github.ironslayer.spring_boot_starter_template.common.mediator.Mediato
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.authenticateUser.AuthenticateUserRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.authenticateUser.AuthenticateUserResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.deleteUser.DeleteUserRequest;
-import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerUser.RegisterUserRequest;
-import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerUser.RegisterUserResponse;
+import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerOperator.RegisterOperatorRequest;
+import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerOperator.RegisterOperatorResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.updateUser.UpdateUserRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getAllUsers.GetAllUsersRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getAllUsers.GetAllUsersResponse;
@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,8 +53,9 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @Operation(summary = "List all users", description = "List all users")
+    @Operation(summary = "List all users", description = "List all users (ADMIN only)")
     @GetMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UserDTO>> findAll() {
 
         log.info("UserController Get all users");
@@ -76,8 +78,9 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Delete a user", description = "Delete a user")
+    @Operation(summary = "Delete a user", description = "Delete a user (ADMIN only)")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
         mediator.dispatch(new DeleteUserRequest(id));
@@ -85,13 +88,14 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Register a user", description = "Register a user")
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticatedUserDTO> register(@RequestBody @Validated RegisterUserDTO request) {
+    @Operation(summary = "Register an operator", description = "Register a new operator for the parking system (ADMIN only)")
+    @PostMapping("/register-operator")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AuthenticatedUserDTO> registerOperator(@RequestBody @Validated RegisterUserDTO request) {
 
         User user = userMapper.registerUserDTOToUser(request);
 
-        RegisterUserResponse response = mediator.dispatch(new RegisterUserRequest(user));
+        RegisterOperatorResponse response = mediator.dispatch(new RegisterOperatorRequest(user));
 
         return ResponseEntity.ok(new AuthenticatedUserDTO(response.jwt()));
     }
