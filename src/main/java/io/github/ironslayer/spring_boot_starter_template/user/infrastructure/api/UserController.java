@@ -21,7 +21,7 @@ public interface UserController {
 
     ResponseEntity<Void> delete(@PathVariable Long id);
 
-    ResponseEntity<AuthenticatedUserDTO> register(@RequestBody RegisterUserDTO request);
+    ResponseEntity<AuthenticatedUserDTO> registerOperator(@RequestBody RegisterUserDTO request);
 
     ResponseEntity<AuthenticatedUserDTO> authenticate(@RequestBody AuthenticationUserDTO request);
 }
