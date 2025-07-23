@@ -100,3 +100,6 @@ Esto asegura independencia total entre los tests y resultados reproducibles.
 - Loki (logs centralizados): http://localhost:3100
 - Prometheus (métricas): http://localhost:9090
 
+
+
+
