@@ -6,12 +6,12 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 /**
- * DTO para la actualización de vehículos.
+ * DTO para la actualización parcial de vehículos (PATCH).
+ * Todos los campos son opcionales - solo se actualizan los que se envían.
  * No incluye el ID ni la placa ya que son immutables.
  */
 public record UpdateVehicleRequestDTO(
         
-        @NotNull(message = "Vehicle type ID is required")
         @Positive(message = "Vehicle type ID must be positive")
         @JsonProperty("vehicleTypeId")
         Long vehicleTypeId,
