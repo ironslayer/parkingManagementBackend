@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -22,6 +23,18 @@ public class JwtService {
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public List<String> extractAuthorities(String token) {
+        return extractClaim(token, claims -> {
+            List<?> authoritiesList = claims.get("authorities", List.class);
+            if (authoritiesList == null) {
+                return List.of();
+            }
+            return authoritiesList.stream()
+                    .map(Object::toString)
+                    .toList();
+        });
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -37,6 +50,12 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
+        // Añadir las authorities del usuario al token
+        List<String> authorities = userDetails.getAuthorities().stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .toList();
+        extraClaims.put("authorities", authorities);
+        
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
