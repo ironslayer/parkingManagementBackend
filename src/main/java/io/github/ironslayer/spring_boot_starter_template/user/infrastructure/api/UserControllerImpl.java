@@ -42,8 +42,9 @@ public class UserControllerImpl implements UserController {
     private final Mediator mediator;
     private final UserMapper userMapper;
 
-    @Operation(summary = "Find a user", description = "Find a user")
+    @Operation(summary = "Find a user", description = "Find a user (ADMIN only)")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
 
         GetUserResponse response = mediator.dispatch(new GetUserRequest(id));
@@ -67,8 +68,9 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(userDTOS);
     }
 
-    @Operation(summary = "Update a user", description = "Update a user")
+    @Operation(summary = "Update a user", description = "Update a user (ADMIN only)")
     @PutMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> update(@RequestBody UserDTO userDTO) {
 
         User user = userMapper.userDTOToUser(userDTO);
