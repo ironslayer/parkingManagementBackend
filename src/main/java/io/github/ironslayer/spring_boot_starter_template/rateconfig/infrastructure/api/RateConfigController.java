@@ -51,8 +51,9 @@ public class RateConfigController {
     /**
      * Obtener una configuración de tarifa por ID
      */
-    @Operation(summary = "Find a rate configuration", description = "Find a rate configuration by ID")
+    @Operation(summary = "Find a rate configuration", description = "Find a rate configuration by ID (ADMIN or OPERATOR)")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OPERATOR')")
     public ResponseEntity<RateConfigResponseDTO> findById(@PathVariable Long id) {
 
         log.info("RateConfigController Get rate config by ID: {}", id);
@@ -84,8 +85,9 @@ public class RateConfigController {
     /**
      * Obtener configuración activa por tipo de vehículo
      */
-    @Operation(summary = "Find active rate configuration by vehicle type", description = "Find the active rate configuration for a specific vehicle type")
+    @Operation(summary = "Find active rate configuration by vehicle type", description = "Find the active rate configuration for a specific vehicle type (ADMIN or OPERATOR)")
     @GetMapping("/by-vehicle-type/{vehicleTypeId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OPERATOR')")
     public ResponseEntity<RateConfigResponseDTO> findByVehicleType(@PathVariable Long vehicleTypeId) {
 
         log.info("RateConfigController Get active rate config for vehicle type ID: {}", vehicleTypeId);
