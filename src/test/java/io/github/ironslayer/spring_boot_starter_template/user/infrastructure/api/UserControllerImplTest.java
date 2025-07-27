@@ -79,7 +79,7 @@ class UserControllerImplTest {
 
         RegisterUserDTO userRegisterDTO = RegisterUserDTO.builder().build();
 
-        ResponseEntity<AuthenticatedUserDTO> response = controller.register(userRegisterDTO);
+        ResponseEntity<AuthenticatedUserDTO> response = controller.registerOperator(userRegisterDTO);
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
 
