@@ -36,8 +36,9 @@ public class VehicleTypeController {
     private final Mediator mediator;
     private final VehicleTypeDTOMapper dtoMapper;
 
-    @Operation(summary = "Find a vehicle type", description = "Find a vehicle type")
+    @Operation(summary = "Find a vehicle type", description = "Find a vehicle type (ADMIN or OPERATOR)")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OPERATOR')")
     public ResponseEntity<VehicleTypeResponseDTO> findById(@PathVariable Long id) {
 
         GetVehicleTypeResponse response = mediator.dispatch(new GetVehicleTypeRequest(id));
@@ -47,9 +48,9 @@ public class VehicleTypeController {
         return ResponseEntity.ok(vehicleTypeDTO);
     }
 
-    @Operation(summary = "List all vehicle types", description = "List all vehicle types (ADMIN only)")
+    @Operation(summary = "List all vehicle types", description = "List all vehicle types (ADMIN or OPERATOR)")
     @GetMapping()
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OPERATOR')")
     public ResponseEntity<List<VehicleTypeResponseDTO>> findAll() {
 
         log.info("VehicleTypeController Get all vehicle types");
