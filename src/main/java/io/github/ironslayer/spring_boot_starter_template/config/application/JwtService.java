@@ -25,6 +25,16 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public Long extractUserId(String token) {
+        return extractClaim(token, claims -> {
+            Object userIdObj = claims.get("user_id");
+            if (userIdObj instanceof Number) {
+                return ((Number) userIdObj).longValue();
+            }
+            return null;
+        });
+    }
+
     public List<String> extractAuthorities(String token) {
         return extractClaim(token, claims -> {
             List<?> authoritiesList = claims.get("authorities", List.class);
@@ -55,6 +65,13 @@ public class JwtService {
                 .map(grantedAuthority -> grantedAuthority.getAuthority())
                 .toList();
         extraClaims.put("authorities", authorities);
+        
+        // Agregar user_id al token si UserDetails es una instancia de UserEntity
+        if (userDetails instanceof io.github.ironslayer.spring_boot_starter_template.user.infrastructure.entity.UserEntity) {
+            io.github.ironslayer.spring_boot_starter_template.user.infrastructure.entity.UserEntity userEntity = 
+                (io.github.ironslayer.spring_boot_starter_template.user.infrastructure.entity.UserEntity) userDetails;
+            extraClaims.put("user_id", userEntity.getId());
+        }
         
         return Jwts
                 .builder()
