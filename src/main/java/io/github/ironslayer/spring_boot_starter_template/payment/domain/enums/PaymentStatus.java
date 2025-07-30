@@ -5,6 +5,6 @@ package io.github.ironslayer.spring_boot_starter_template.payment.domain.enums;
  */
 public enum PaymentStatus {
     PENDING,   // Pendiente de pago
-    PAID,      // Pagado exitosamente
+    PAID,      // Pago exitoso
     CANCELLED  // Cancelado
 }
