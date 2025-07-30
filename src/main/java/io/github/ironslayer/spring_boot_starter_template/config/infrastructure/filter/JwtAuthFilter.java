@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,14 +20,16 @@ import java.io.IOException;
 
 @Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
-    @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private UserDetailsService userDetailsService;
-    private HandlerExceptionResolver handlerExceptionResolver;
+    
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
-    @Autowired
-    public JwtAuthFilter(HandlerExceptionResolver handlerExceptionResolver) {
+    public JwtAuthFilter(JwtService jwtService, 
+                        UserDetailsService userDetailsService, 
+                        HandlerExceptionResolver handlerExceptionResolver) {
+        this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
