@@ -186,7 +186,7 @@ public class PaymentController {
     @Operation(
             summary = "Cancel Payment",
             description = "Cancels a pending payment. Only PENDING payments can be cancelled.",
-            security = @SecurityRequirement(name = "bearer-key")
+            security = @SecurityRequirement(name = "Bearer Authentication")
     )
     public ResponseEntity<Map<String, Object>> cancelPayment(
             @PathVariable @Positive Long id,
