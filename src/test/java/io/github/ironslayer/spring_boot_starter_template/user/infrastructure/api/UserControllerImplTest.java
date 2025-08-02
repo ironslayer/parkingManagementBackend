@@ -3,6 +3,7 @@ package io.github.ironslayer.spring_boot_starter_template.user.infrastructure.ap
 import io.github.ironslayer.spring_boot_starter_template.common.mediator.Mediator;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.authenticateUser.AuthenticateUserResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerUser.RegisterUserResponse;
+import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerOperator.RegisterOperatorResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getAllUsers.GetAllUsersResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getUser.GetUserResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.domain.entity.User;
@@ -74,7 +75,7 @@ class UserControllerImplTest {
 
     @Test
     void register() {
-        when(mediator.dispatch(any())).thenReturn(new RegisterUserResponse("12345"));
+        when(mediator.dispatch(any())).thenReturn(new RegisterOperatorResponse("12345"));
         when(userMapper.registerUserDTOToUser(any())).thenReturn(user);
 
         RegisterUserDTO userRegisterDTO = RegisterUserDTO.builder().build();
