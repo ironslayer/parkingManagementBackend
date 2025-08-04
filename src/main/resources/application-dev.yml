@@ -50,3 +50,24 @@ springdoc:
 logging:
   pattern:
     correlation: [ "${ spring.application.name: },%X{ traceId:- },%X{ spanId:- }" ]
+
+# Configuración CORS para desarrollo
+app:
+  cors:
+    allowed-origins: 
+      - http://localhost:3000    # React development
+      - http://localhost:5173    # Vite development
+      - http://localhost:4200    # Angular development
+      - http://127.0.0.1:3000    # Localhost variants
+      - http://127.0.0.1:5173
+      - http://127.0.0.1:4200
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+      - OPTIONS
+    allowed-headers: "*"
+    allow-credentials: true
+    max-age: 3600  # Cache preflight for 1 hour (development)
