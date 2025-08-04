@@ -3,3 +3,21 @@ spring:
     name: spring-boot-application
   profiles:
     active: dev
+
+# Configuración centralizada de CORS
+app:
+  cors:
+    allowed-origins: 
+      - http://localhost:3000  # React default
+      - http://localhost:5173  # Vite default  
+      - http://localhost:4200  # Angular default
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+      - OPTIONS
+    allowed-headers: "*"
+    allow-credentials: true
+    max-age: 3600  # Cache preflight for 1 hour
