@@ -24,4 +24,6 @@ public interface UserController {
     ResponseEntity<AuthenticatedUserDTO> registerOperator(@RequestBody RegisterUserDTO request);
 
     ResponseEntity<AuthenticatedUserDTO> authenticate(@RequestBody AuthenticationUserDTO request);
+
+    ResponseEntity<Void> logout();
 }
