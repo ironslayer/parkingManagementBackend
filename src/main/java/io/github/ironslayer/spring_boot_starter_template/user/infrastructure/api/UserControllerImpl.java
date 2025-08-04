@@ -111,6 +111,16 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(new AuthenticatedUserDTO(response.jwt()));
     }
 
+    @Operation(summary = "Logout a user", description = "Logout the authenticated user")
+    @PostMapping("/logout")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> logout() {
+        // En JWT stateless, el logout es manejado del lado del cliente
+        // eliminando el token. Aquí simplemente confirmamos que el token es válido
+        log.info("User logout successful");
+        return ResponseEntity.ok().build();
+    }
+
 }
 
 
