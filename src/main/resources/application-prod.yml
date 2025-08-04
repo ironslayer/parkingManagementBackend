@@ -1,0 +1,18 @@
+# Configuración CORS para producción - MÁS RESTRICTIVA
+app:
+  cors:
+    allowed-origins: 
+      - https://parking-management.yourdomain.com  # Frontend de producción
+      - https://admin.yourdomain.com               # Admin panel
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+    allowed-headers: 
+      - "Content-Type"
+      - "Authorization"
+      - "X-Requested-With"
+    allow-credentials: true
+    max-age: 86400  # Cache preflight for 24 hours (production)
