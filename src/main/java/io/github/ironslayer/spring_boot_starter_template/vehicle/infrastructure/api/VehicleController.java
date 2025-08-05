@@ -119,6 +119,21 @@ public class VehicleController {
         
         return ResponseEntity.ok(responseDTO);
     }
+
+    @Operation(summary = "Search vehicle by license plate", description = "Search a vehicle by license plate using query parameter (ADMIN and OPERATOR)")
+    @GetMapping("/search")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OPERATOR')")
+    public ResponseEntity<VehicleResponseDTO> searchVehicleByLicensePlate(
+            @Parameter(description = "License plate to search for") 
+            @RequestParam String licensePlate) {
+        
+        FindVehicleByLicensePlateRequest request = new FindVehicleByLicensePlateRequest(licensePlate);
+        FindVehicleByLicensePlateResponse response = mediator.dispatch(request);
+        
+        VehicleResponseDTO responseDTO = dtoMapper.toResponseDTO(response.vehicle());
+        
+        return ResponseEntity.ok(responseDTO);
+    }
     
     @Operation(summary = "Delete a vehicle", description = "Soft delete a vehicle by deactivating it (ADMIN only)")
     @DeleteMapping("/{id}")
