@@ -120,6 +120,23 @@ public class ParkingSpaceController {
         
         return ResponseEntity.ok(responseDTO);
     }
+
+    @Operation(summary = "Get real-time parking spaces status", 
+              description = "Get current status of all parking spaces with real-time occupancy information (ADMIN and OPERATOR)")
+    @GetMapping("/status")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('OPERATOR')")
+    public ResponseEntity<List<ParkingSpaceResponseDTO>> getParkingSpacesStatus() {
+        
+        GetAllParkingSpacesRequest request = new GetAllParkingSpacesRequest();
+        GetAllParkingSpacesResponse response = mediator.dispatch(request);
+        
+        List<ParkingSpaceResponseDTO> responseDTO = response.parkingSpaces()
+                .stream()
+                .map(dtoMapper::toResponseDTO)
+                .toList();
+        
+        return ResponseEntity.ok(responseDTO);
+    }
     
     @Operation(summary = "Occupy a parking space", description = "Occupy a parking space with a vehicle (ADMIN and OPERATOR)")
     @PostMapping("/{id}/occupy")
