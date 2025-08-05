@@ -33,7 +33,7 @@ import java.util.Map;
  * Controlador REST para operaciones de pagos
  */
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping("/api/v1/payments")
 @SecurityRequirement(name = "Bearer Authentication")
 @Tag(name = "Payment", description = "The Payment API. Contains all operations for processing payments and calculating amounts for parking sessions.")
 @RequiredArgsConstructor
