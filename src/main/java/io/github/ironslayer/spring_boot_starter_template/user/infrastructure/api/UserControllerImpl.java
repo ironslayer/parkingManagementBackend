@@ -12,6 +12,8 @@ import io.github.ironslayer.spring_boot_starter_template.user.application.query.
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getAllUsers.GetAllUsersResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getUser.GetUserRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getUser.GetUserResponse;
+import io.github.ironslayer.spring_boot_starter_template.user.application.query.getCurrentUserProfile.GetCurrentUserProfileRequest;
+import io.github.ironslayer.spring_boot_starter_template.user.application.query.getCurrentUserProfile.GetCurrentUserProfileResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.domain.entity.User;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticatedUserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticationUserDTO;
@@ -119,6 +121,22 @@ public class UserControllerImpl implements UserController {
         // eliminando el token. Aquí simplemente confirmamos que el token es válido
         log.info("User logout successful");
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Get current user profile", description = "Get the profile of the currently authenticated user")
+    @GetMapping("/profile")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserDTO> getCurrentUserProfile() {
+        
+        log.info("Getting current user profile");
+        
+        GetCurrentUserProfileResponse response = mediator.dispatch(new GetCurrentUserProfileRequest());
+        
+        UserDTO userDTO = userMapper.userToUserDTO(response.user());
+        
+        log.info("Successfully retrieved profile for user: {}", userDTO.getEmail());
+        
+        return ResponseEntity.ok(userDTO);
     }
 
 }
