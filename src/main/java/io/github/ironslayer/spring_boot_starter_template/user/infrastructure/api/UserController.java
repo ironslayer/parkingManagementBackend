@@ -26,4 +26,6 @@ public interface UserController {
     ResponseEntity<AuthenticatedUserDTO> authenticate(@RequestBody AuthenticationUserDTO request);
 
     ResponseEntity<Void> logout();
+
+    ResponseEntity<UserDTO> getCurrentUserProfile();
 }
