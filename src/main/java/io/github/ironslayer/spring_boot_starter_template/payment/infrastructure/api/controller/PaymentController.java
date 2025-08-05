@@ -32,6 +32,7 @@ import java.util.Map;
 /**
  * Controlador REST para operaciones de pagos
  */
+
 @RestController
 @RequestMapping("/api/v1/payments")
 @SecurityRequirement(name = "Bearer Authentication")
