@@ -1,9 +1,9 @@
 package io.github.ironslayer.spring_boot_starter_template.vehicle.infrastructure.api;
 
 import io.github.ironslayer.spring_boot_starter_template.common.mediator.Mediator;
+import io.github.ironslayer.spring_boot_starter_template.vehicle.application.command.changestatus.ChangeVehicleStatusRequest;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.application.command.create.CreateVehicleRequest;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.application.command.create.CreateVehicleResponse;
-import io.github.ironslayer.spring_boot_starter_template.vehicle.application.command.delete.DeleteVehicleRequest;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.application.command.update.UpdateVehicleRequest;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.application.query.findByLicensePlate.FindVehicleByLicensePlateRequest;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.application.query.findByLicensePlate.FindVehicleByLicensePlateResponse;
@@ -12,6 +12,7 @@ import io.github.ironslayer.spring_boot_starter_template.vehicle.application.que
 import io.github.ironslayer.spring_boot_starter_template.vehicle.application.query.getVehicle.GetVehicleRequest;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.application.query.getVehicle.GetVehicleResponse;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.domain.entity.Vehicle;
+import io.github.ironslayer.spring_boot_starter_template.vehicle.infrastructure.api.dto.ChangeVehicleStatusRequestDTO;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.infrastructure.api.dto.CreateVehicleRequestDTO;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.infrastructure.api.dto.UpdateVehicleRequestDTO;
 import io.github.ironslayer.spring_boot_starter_template.vehicle.infrastructure.api.dto.VehicleResponseDTO;
@@ -135,12 +136,14 @@ public class VehicleController {
         return ResponseEntity.ok(responseDTO);
     }
     
-    @Operation(summary = "Delete a vehicle", description = "Soft delete a vehicle by deactivating it (ADMIN only)")
-    @DeleteMapping("/{id}")
+    @Operation(summary = "Change vehicle status", description = "Activate or deactivate a vehicle (ADMIN only)")
+    @PatchMapping("/{id}/status")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Void> deleteVehicle(@PathVariable Long id) {
+    public ResponseEntity<Void> changeVehicleStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody ChangeVehicleStatusRequestDTO requestDTO) {
         
-        DeleteVehicleRequest request = new DeleteVehicleRequest(id);
+        ChangeVehicleStatusRequest request = new ChangeVehicleStatusRequest(id, requestDTO.isActive());
         mediator.dispatch(request);
         
         return ResponseEntity.noContent().build();
