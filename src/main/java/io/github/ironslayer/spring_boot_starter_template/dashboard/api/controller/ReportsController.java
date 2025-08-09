@@ -29,6 +29,7 @@ import java.util.List;
 /**
  * Controlador REST para reportes de ocupación e ingresos del parqueadero
  */
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/reports")
