@@ -5,6 +5,7 @@ import io.github.ironslayer.spring_boot_starter_template.exception.domain.BadReq
 import io.github.ironslayer.spring_boot_starter_template.exception.domain.ErrorMessage;
 import io.github.ironslayer.spring_boot_starter_template.exception.domain.InvalidTokenException;
 import io.github.ironslayer.spring_boot_starter_template.user.domain.exception.UserNotFoundException;
+import io.github.ironslayer.spring_boot_starter_template.user.domain.exception.UserStatusConflictException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.persistence.EntityNotFoundException;
@@ -62,6 +63,15 @@ public class ApiExceptionHandler {
     })
     @ResponseBody
     public ErrorMessage unauthorized(HttpServletRequest request, Exception exception) {
+        return new ErrorMessage(exception, request.getRequestURI());
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler({
+            UserStatusConflictException.class
+    })
+    @ResponseBody
+    public ErrorMessage conflict(HttpServletRequest request, Exception exception) {
         return new ErrorMessage(exception, request.getRequestURI());
     }
 }
