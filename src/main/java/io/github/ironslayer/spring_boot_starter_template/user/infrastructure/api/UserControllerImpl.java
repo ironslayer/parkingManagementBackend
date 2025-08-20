@@ -6,7 +6,9 @@ import io.github.ironslayer.spring_boot_starter_template.user.application.comman
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.authenticateUser.AuthenticateUserResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerOperator.RegisterOperatorRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerOperator.RegisterOperatorResponse;
+import io.github.ironslayer.spring_boot_starter_template.user.application.command.updateProfile.UpdateProfileRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.updateUser.UpdateUserRequest;
+import io.github.ironslayer.spring_boot_starter_template.user.application.command.updateUserPartial.UpdateUserPartialRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.updateUserStatus.UpdateUserStatusRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getAllUsers.GetAllUsersRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getAllUsers.GetAllUsersResponse;
@@ -18,6 +20,8 @@ import io.github.ironslayer.spring_boot_starter_template.user.domain.entity.User
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticatedUserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticationUserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.RegisterUserDTO;
+import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UpdateProfileRequestDTO;
+import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UpdateUserRequestDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UpdateUserStatusRequestDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.mapper.UserMapper;
@@ -84,6 +88,30 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Update user partially", description = "Partially update a user (ADMIN only)")
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> updateUserPartial(
+            @PathVariable Long id, 
+            @RequestBody @Valid UpdateUserRequestDTO request) {
+        
+        log.info("Updating user partially: userId={}, fields={}", id, request);
+        
+        UpdateUserPartialRequest partialRequest = new UpdateUserPartialRequest(
+            id, 
+            request.firstname(), 
+            request.lastname(), 
+            request.email(), 
+            request.role()
+        );
+        
+        mediator.dispatch(partialRequest);
+        
+        log.info("Successfully updated user partially: userId={}", id);
+        
+        return ResponseEntity.noContent().build();
+    }
+
     @Operation(summary = "Update user status", description = "Change user status (activate/deactivate) - ADMIN only")
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -97,6 +125,27 @@ public class UserControllerImpl implements UserController {
         mediator.dispatch(statusRequest);
         
         log.info("Successfully updated user status: userId={}", id);
+        
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Update user profile", description = "Update the profile of the authenticated user")
+    @PatchMapping("/profile")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> updateProfile(@RequestBody @Valid UpdateProfileRequestDTO request) {
+        
+        log.info("Updating user profile for authenticated user");
+        
+        UpdateProfileRequest profileRequest = new UpdateProfileRequest(
+            request.firstname(),
+            request.lastname(),
+            request.currentPassword(),
+            request.newPassword()
+        );
+        
+        mediator.dispatch(profileRequest);
+        
+        log.info("Successfully updated user profile");
         
         return ResponseEntity.noContent().build();
     }
