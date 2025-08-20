@@ -4,10 +4,10 @@ package io.github.ironslayer.spring_boot_starter_template.user.infrastructure.ap
 import io.github.ironslayer.spring_boot_starter_template.common.mediator.Mediator;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.authenticateUser.AuthenticateUserRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.authenticateUser.AuthenticateUserResponse;
-import io.github.ironslayer.spring_boot_starter_template.user.application.command.deleteUser.DeleteUserRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerOperator.RegisterOperatorRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.registerOperator.RegisterOperatorResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.application.command.updateUser.UpdateUserRequest;
+import io.github.ironslayer.spring_boot_starter_template.user.application.command.updateUserStatus.UpdateUserStatusRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getAllUsers.GetAllUsersRequest;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getAllUsers.GetAllUsersResponse;
 import io.github.ironslayer.spring_boot_starter_template.user.application.query.getUser.GetUserRequest;
@@ -18,11 +18,13 @@ import io.github.ironslayer.spring_boot_starter_template.user.domain.entity.User
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticatedUserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticationUserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.RegisterUserDTO;
+import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UpdateUserStatusRequestDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -82,13 +84,20 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Delete a user", description = "Delete a user (ADMIN only)")
-    @DeleteMapping("/{id}")
+    @Operation(summary = "Update user status", description = "Change user status (activate/deactivate) - ADMIN only")
+    @PatchMapping("/{id}/status")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-
-        mediator.dispatch(new DeleteUserRequest(id));
-
+    public ResponseEntity<Void> updateUserStatus(
+            @PathVariable Long id, 
+            @RequestBody @Valid UpdateUserStatusRequestDTO request) {
+        
+        log.info("Updating user status: userId={}, newStatus={}", id, request.isActive());
+        
+        UpdateUserStatusRequest statusRequest = new UpdateUserStatusRequest(id, request.isActive());
+        mediator.dispatch(statusRequest);
+        
+        log.info("Successfully updated user status: userId={}", id);
+        
         return ResponseEntity.noContent().build();
     }
 
