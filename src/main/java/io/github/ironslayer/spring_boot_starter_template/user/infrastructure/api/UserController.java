@@ -4,6 +4,8 @@ package io.github.ironslayer.spring_boot_starter_template.user.infrastructure.ap
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticatedUserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticationUserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.RegisterUserDTO;
+import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UpdateProfileRequestDTO;
+import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UpdateUserRequestDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UpdateUserStatusRequestDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UserDTO;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,11 @@ public interface UserController {
 
     ResponseEntity<Void> update(@RequestBody UserDTO userDTO);
 
+    ResponseEntity<Void> updateUserPartial(@PathVariable Long id, @RequestBody UpdateUserRequestDTO request);
+
     ResponseEntity<Void> updateUserStatus(@PathVariable Long id, @RequestBody UpdateUserStatusRequestDTO request);
+
+    ResponseEntity<Void> updateProfile(@RequestBody UpdateProfileRequestDTO request);
 
     ResponseEntity<AuthenticatedUserDTO> registerOperator(@RequestBody RegisterUserDTO request);
 
