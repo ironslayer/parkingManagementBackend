@@ -4,6 +4,7 @@ package io.github.ironslayer.spring_boot_starter_template.user.infrastructure.ap
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticatedUserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.AuthenticationUserDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.RegisterUserDTO;
+import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UpdateUserStatusRequestDTO;
 import io.github.ironslayer.spring_boot_starter_template.user.infrastructure.api.dto.UserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ public interface UserController {
 
     ResponseEntity<Void> update(@RequestBody UserDTO userDTO);
 
-    ResponseEntity<Void> delete(@PathVariable Long id);
+    ResponseEntity<Void> updateUserStatus(@PathVariable Long id, @RequestBody UpdateUserStatusRequestDTO request);
 
     ResponseEntity<AuthenticatedUserDTO> registerOperator(@RequestBody RegisterUserDTO request);
 
