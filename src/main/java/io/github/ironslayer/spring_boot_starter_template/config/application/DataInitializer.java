@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 @Order(1) // Se ejecuta antes que otros CommandLineRunner
 public class DataInitializer implements CommandLineRunner {
 
+    
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
