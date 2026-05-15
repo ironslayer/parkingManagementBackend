@@ -10,4 +10,5 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 public class ApplicationConfig {
 
 
+    
 }
